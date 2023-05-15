@@ -26,9 +26,6 @@ public class AuthenticationService {
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             throw new BadRequestException("User with this email already exists");
         }
-        if (repository.findByUserName(request.getUserName()).isPresent()) {
-            throw new BadRequestException("User with this username already exists");
-        }
         validator.emailValidate(request.getEmail());
         validator.passwordValidate(request.getPassword());
         validator.firstNameValidate(request.getFirstName());
@@ -37,7 +34,6 @@ public class AuthenticationService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
-                .userName(request.getUserName())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
