@@ -4,6 +4,7 @@ import com.example.goalmates.config.JwtService;
 import com.example.goalmates.controller.AuthenticationRequest;
 import com.example.goalmates.controller.AuthenticationResponse;
 import com.example.goalmates.controller.RegisterRequest;
+import com.example.goalmates.dto.UserWithoutPasswordDTO;
 import com.example.goalmates.exception.BadRequestException;
 import com.example.goalmates.exception.NotFoundException;
 import com.example.goalmates.exception.UnauthorizedException;
@@ -11,6 +12,7 @@ import com.example.goalmates.repository.UserRepository;
 import com.example.goalmates.user.Role;
 import com.example.goalmates.user.User;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final InfoValidator validator;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public UserWithoutPasswordDTO register(RegisterRequest request) {
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             throw new BadRequestException("User with this email already exists");
         }
@@ -38,14 +40,14 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse
-                .builder()
-                .token(jwtToken)
-                .build();
+        String jwtToken = jwtService.generateToken(user);
+        ModelMapper modelMapper = new ModelMapper();
+        UserWithoutPasswordDTO userWithoutPassword = modelMapper.map(user,UserWithoutPasswordDTO.class);
+        userWithoutPassword.setToken(jwtToken);
+        return userWithoutPassword;
     }
 
-    public AuthenticationResponse login(AuthenticationRequest request) {
+    public UserWithoutPasswordDTO login(AuthenticationRequest request) {
         if (request.getEmail() == null || request.getEmail().isBlank()) {
             throw new BadRequestException("Email is mandatory");
         }
@@ -59,11 +61,11 @@ public class AuthenticationService {
             if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 throw new UnauthorizedException("Wrong credentials");
             }
-            var jwtToken = jwtService.generateToken(user);
-            return AuthenticationResponse
-                    .builder()
-                    .token(jwtToken)
-                    .build();
+            String jwtToken = jwtService.generateToken(user);
+            ModelMapper modelMapper = new ModelMapper();
+            UserWithoutPasswordDTO userWithoutPassword = modelMapper.map(user,UserWithoutPasswordDTO.class);
+            userWithoutPassword.setToken(jwtToken);
+            return userWithoutPassword;
         } else {
             throw new NotFoundException("User not found");
         }
