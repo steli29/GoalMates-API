@@ -20,13 +20,15 @@ public class UserService {
     private UserRepository userRepository;
 
     public void edit(User user, UserEditDTO userEditDTO) {
-        if (userEditDTO.getEmail() != null && userRepository.findByEmail(userEditDTO.getEmail()).isEmpty()){
-            infoValidator.emailValidate(userEditDTO.getEmail());
-            user.setEmail(userEditDTO.getEmail());
-        }else {
-            throw new BadRequestException("Email is already used");
+        System.out.println(userEditDTO.toString());
+        if (userEditDTO.getEmail() != null) {
+            if (userRepository.findByEmail(userEditDTO.getEmail()).isEmpty()) {
+                infoValidator.emailValidate(userEditDTO.getEmail());
+                user.setEmail(userEditDTO.getEmail());
+            } else {
+                throw new BadRequestException("Email is already used");
+            }
         }
-
 
         if (userEditDTO.getFirstName() != null) {
             infoValidator.firstNameValidate(userEditDTO.getFirstName());
@@ -40,6 +42,9 @@ public class UserService {
         if (userEditDTO.getPassword() != null) {
             infoValidator.passwordValidate(userEditDTO.getPassword());
             user.setPassword(passwordEncoder.encode(userEditDTO.getPassword()));
+        }
+        if (userEditDTO.getImage() != null) {
+            user.setImage(userEditDTO.getImage());
         }
     }
 }
