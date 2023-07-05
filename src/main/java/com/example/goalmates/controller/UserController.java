@@ -42,11 +42,10 @@ public class UserController {
         return ResponseEntity.ok(userWithoutPassword);
     }
 
-    @GetMapping("/search/{name}")
-    public ResponseEntity<List<UserSearchResultDTO>> search(@PathVariable String name) {
+    @GetMapping("/search")
+    public ResponseEntity<List<UserSearchResultDTO>> search(@RequestParam("name") String name) {
         ModelMapper modelMapper = new ModelMapper();
-        String[] s = name.split("=");
-        List<User> users = userRepository.search(s[1]);
+        List<User> users = userRepository.search(name);
         System.out.println(users);
         List<UserSearchResultDTO> result = new ArrayList<>();
         for (User user : users) {
