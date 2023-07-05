@@ -33,10 +33,12 @@ public class UserService {
         if (userEditDTO.getFirstName() != null) {
             infoValidator.firstNameValidate(userEditDTO.getFirstName());
             user.setFirstName(userEditDTO.getFirstName());
+            user.setFullName(userEditDTO.getFirstName()+ " "+ user.getLastName());
         }
         if (userEditDTO.getLastName() != null) {
             infoValidator.lastNameValidate(userEditDTO.getLastName());
             user.setLastName(userEditDTO.getLastName());
+            user.setFullName(user.getFirstName()+ " "+ userEditDTO.getLastName());
         }
 
         if (userEditDTO.getPassword() != null) {
