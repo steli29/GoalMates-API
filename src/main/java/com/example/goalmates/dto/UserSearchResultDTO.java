@@ -7,11 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserWithoutPasswordDTO {
+public class UserSearchResultDTO {
     private Long id;
     private String firstName;
     private String lastName;
-    private String email;
-    private String token;
     private String image;
 }

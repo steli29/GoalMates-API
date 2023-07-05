@@ -1,5 +1,6 @@
 package com.example.goalmates.config;
 
+import com.example.goalmates.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,7 +25,7 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUsername(token);
-        return userName.equals(userDetails.getUsername()) && isTokenExpired(token);
+        return userName.equals(String.valueOf(((User)userDetails).getId())) && isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
@@ -40,12 +41,13 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        User user = (User) userDetails;
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(String.valueOf(user.getId()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 200))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

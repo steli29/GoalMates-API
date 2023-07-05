@@ -1,6 +1,8 @@
 package com.example.goalmates.config;
 
+import com.example.goalmates.exception.NotFoundException;
 import com.example.goalmates.repository.UserRepository;
+import com.example.goalmates.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +21,8 @@ public class ApplicationConfig {
 private final UserRepository repository;
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return id -> repository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Bean
