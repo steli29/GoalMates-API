@@ -38,7 +38,9 @@ public class UserController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userService.edit(user, userEditDTO);
         userRepository.save(user);
+        String jwtToken = jwtService.generateToken(user);
         UserWithoutPasswordDTO userWithoutPassword = mapper.map(user, UserWithoutPasswordDTO.class);
+        userWithoutPassword.setToken(jwtToken);
         return ResponseEntity.ok(userWithoutPassword);
     }
 
