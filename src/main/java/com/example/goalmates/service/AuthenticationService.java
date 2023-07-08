@@ -2,7 +2,6 @@ package com.example.goalmates.service;
 
 import com.example.goalmates.config.JwtService;
 import com.example.goalmates.controller.AuthenticationRequest;
-import com.example.goalmates.controller.AuthenticationResponse;
 import com.example.goalmates.controller.RegisterRequest;
 import com.example.goalmates.dto.UserWithoutPasswordDTO;
 import com.example.goalmates.exception.BadRequestException;
@@ -10,7 +9,7 @@ import com.example.goalmates.exception.NotFoundException;
 import com.example.goalmates.exception.UnauthorizedException;
 import com.example.goalmates.repository.UserRepository;
 import com.example.goalmates.user.Role;
-import com.example.goalmates.user.User;
+import com.example.goalmates.models.User;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;

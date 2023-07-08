@@ -1,7 +1,6 @@
 package com.example.goalmates.dto;
 
-import com.example.goalmates.user.User;
-import lombok.AllArgsConstructor;
+import com.example.goalmates.models.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

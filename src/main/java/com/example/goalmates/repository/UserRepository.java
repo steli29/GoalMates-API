@@ -1,6 +1,6 @@
 package com.example.goalmates.repository;
 
-import com.example.goalmates.user.User;
+import com.example.goalmates.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

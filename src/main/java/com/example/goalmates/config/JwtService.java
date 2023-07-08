@@ -1,6 +1,6 @@
 package com.example.goalmates.config;
 
-import com.example.goalmates.user.User;
+import com.example.goalmates.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

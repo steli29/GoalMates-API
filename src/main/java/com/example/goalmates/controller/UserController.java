@@ -6,7 +6,7 @@ import com.example.goalmates.dto.UserSearchResultDTO;
 import com.example.goalmates.dto.UserWithoutPasswordDTO;
 import com.example.goalmates.repository.UserRepository;
 import com.example.goalmates.service.UserService;
-import com.example.goalmates.user.User;
+import com.example.goalmates.models.User;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

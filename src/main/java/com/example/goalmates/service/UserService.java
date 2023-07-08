@@ -3,7 +3,7 @@ package com.example.goalmates.service;
 import com.example.goalmates.dto.UserEditDTO;
 import com.example.goalmates.exception.BadRequestException;
 import com.example.goalmates.repository.UserRepository;
-import com.example.goalmates.user.User;
+import com.example.goalmates.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

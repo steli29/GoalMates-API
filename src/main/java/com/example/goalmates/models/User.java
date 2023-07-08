@@ -1,5 +1,6 @@
-package com.example.goalmates.user;
+package com.example.goalmates.models;
 
+import com.example.goalmates.user.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
