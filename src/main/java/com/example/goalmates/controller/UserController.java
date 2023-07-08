@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -48,11 +49,21 @@ public class UserController {
     public ResponseEntity<List<UserSearchResultDTO>> search(@RequestParam("name") String name) {
         ModelMapper modelMapper = new ModelMapper();
         List<User> users = userRepository.search(name);
-        System.out.println(users);
         List<UserSearchResultDTO> result = new ArrayList<>();
         for (User user : users) {
             result.add(modelMapper.map(user, UserSearchResultDTO.class));
         }
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<UserSearchResultDTO> getUserById(@RequestParam("id") Long id) {
+        Optional<User> user = userRepository.findById(id);
+        ModelMapper modelMapper = new ModelMapper();
+        UserSearchResultDTO searchResultDTO = new UserSearchResultDTO();
+        if (user.isPresent()) {
+            searchResultDTO = modelMapper.map(user.get(), UserSearchResultDTO.class);
+        }
+        return ResponseEntity.ok(searchResultDTO);
     }
 }
