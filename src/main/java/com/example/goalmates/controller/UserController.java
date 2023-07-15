@@ -57,13 +57,13 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<UserWithoutPasswordDTO> getUserById(@RequestParam("id") Long id) {
+    public ResponseEntity<UserSearchResultDTO> getUserById(@RequestParam("id") Long id) {
         Optional<User> user = userRepository.findById(id);
         ModelMapper modelMapper = new ModelMapper();
-        UserWithoutPasswordDTO searchResult = new UserWithoutPasswordDTO();
+        UserSearchResultDTO searchResultDTO = new UserSearchResultDTO();
         if (user.isPresent()) {
-            searchResult = modelMapper.map(user.get(), UserWithoutPasswordDTO.class);
+            searchResultDTO = modelMapper.map(user.get(), UserSearchResultDTO.class);
         }
-        return ResponseEntity.ok(searchResult);
+        return ResponseEntity.ok(searchResultDTO);
     }
 }
