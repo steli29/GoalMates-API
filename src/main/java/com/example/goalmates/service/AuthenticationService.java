@@ -10,6 +10,7 @@ import com.example.goalmates.exception.UnauthorizedException;
 import com.example.goalmates.repository.UserRepository;
 import com.example.goalmates.user.Role;
 import com.example.goalmates.models.User;
+import com.example.goalmates.utils.InfoValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;

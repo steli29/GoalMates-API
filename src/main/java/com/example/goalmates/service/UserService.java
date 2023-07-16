@@ -4,6 +4,7 @@ import com.example.goalmates.dto.UserEditDTO;
 import com.example.goalmates.exception.BadRequestException;
 import com.example.goalmates.repository.UserRepository;
 import com.example.goalmates.models.User;
+import com.example.goalmates.utils.InfoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

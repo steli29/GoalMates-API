@@ -1,4 +1,4 @@
-package com.example.goalmates.service;
+package com.example.goalmates.utils;
 
 import com.example.goalmates.exception.BadRequestException;
 import org.springframework.stereotype.Component;
