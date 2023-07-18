@@ -23,7 +23,7 @@ public class UserService {
     public void edit(User user, UserEditDTO userEditDTO) {
         System.out.println(userEditDTO.toString());
         if (userEditDTO.getEmail() != null) {
-            if (userRepository.findByEmail(userEditDTO.getEmail()).isEmpty()) {
+            if (userRepository.findByEmail(userEditDTO.getEmail()).isEmpty() || userEditDTO.getEmail().equals(user.getEmail())) {
                 infoValidator.emailValidate(userEditDTO.getEmail());
                 user.setEmail(userEditDTO.getEmail());
             } else {
