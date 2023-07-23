@@ -17,14 +17,14 @@ public class FollowController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> followUser(@RequestParam("followerId") Long followerId,@RequestParam("followeeId") Long followeeId) {
-        followService.followUser(followerId, followeeId);
+    public ResponseEntity<String> followUser(@RequestBody FollowRequest followRequest) {
+        followService.followUser(followRequest.getFollowerId(), followRequest.getFolloweeId());
         return ResponseEntity.ok("Successfully followed user");
     }
 
     @PostMapping("/unfollow")
-    public ResponseEntity<String> unfollowUser(@RequestParam("followerId") Long followerId, @RequestParam("followeeId") Long followeeId) {
-        followService.unfollowUser(followerId, followeeId);
+    public ResponseEntity<String> unfollowUser(@RequestBody FollowRequest followRequest) {
+        followService.unfollowUser(followRequest.getFollowerId(), followRequest.getFolloweeId());
         return ResponseEntity.ok("Successfully unfollowed user");
     }
     @GetMapping("/followed")

@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserSearchResultDTO {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String image;
+public class UserFollowingDTO extends UserSearchResultDTO {
+    private Boolean isFollowing;
+    private String email;
 }

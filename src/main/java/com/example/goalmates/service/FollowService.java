@@ -10,11 +10,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -73,5 +75,11 @@ public class FollowService {
             result.add(modelMapper.map(follower.getFollowee(), UserSearchResultDTO.class));
         });
         return result;
+    }
+
+    public boolean isFollowing (Long followeeId){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Follow> following = followRepository.findByFollowerIdAndFolloweeId(user.getId(), followeeId);
+        return following.isPresent();
     }
 }

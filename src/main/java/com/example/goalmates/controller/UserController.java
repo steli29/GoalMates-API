@@ -2,9 +2,11 @@ package com.example.goalmates.controller;
 
 import com.example.goalmates.config.JwtService;
 import com.example.goalmates.dto.UserEditDTO;
+import com.example.goalmates.dto.UserFollowingDTO;
 import com.example.goalmates.dto.UserSearchResultDTO;
 import com.example.goalmates.dto.UserWithoutPasswordDTO;
 import com.example.goalmates.repository.UserRepository;
+import com.example.goalmates.service.FollowService;
 import com.example.goalmates.service.UserService;
 import com.example.goalmates.models.User;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,8 @@ public class UserController {
     private UserDetailsService userDetailsService;
     @Autowired
     private JwtService jwtService;
-
+    @Autowired
+    private FollowService followService;
 
     @PostMapping("/edit")
     public ResponseEntity<UserWithoutPasswordDTO> edit(@RequestBody UserEditDTO userEditDTO) {
@@ -57,13 +60,15 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<UserSearchResultDTO> getUserById(@RequestParam("id") Long id) {
+    public ResponseEntity<UserFollowingDTO> getUserById(@RequestParam("id") Long id) {
         Optional<User> user = userRepository.findById(id);
         ModelMapper modelMapper = new ModelMapper();
-        UserSearchResultDTO searchResultDTO = new UserSearchResultDTO();
+        UserFollowingDTO searchResultDTO = new UserFollowingDTO();
         if (user.isPresent()) {
-            searchResultDTO = modelMapper.map(user.get(), UserSearchResultDTO.class);
+            searchResultDTO = modelMapper.map(user.get(), UserFollowingDTO.class);
+            searchResultDTO.setIsFollowing(followService.isFollowing(id));
         }
+        System.out.println(searchResultDTO.getIsFollowing());
         return ResponseEntity.ok(searchResultDTO);
     }
 }
