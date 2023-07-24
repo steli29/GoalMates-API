@@ -7,8 +7,10 @@ import com.example.goalmates.dto.UserSearchResultDTO;
 import com.example.goalmates.dto.UserWithoutPasswordDTO;
 import com.example.goalmates.repository.UserRepository;
 import com.example.goalmates.service.FollowService;
+import com.example.goalmates.service.ImageService;
 import com.example.goalmates.service.UserService;
 import com.example.goalmates.models.User;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +39,9 @@ public class UserController {
     private JwtService jwtService;
     @Autowired
     private FollowService followService;
+    @Autowired
+    private ImageService imageService;
+
 
     @PostMapping("/edit")
     public ResponseEntity<UserWithoutPasswordDTO> edit(@RequestBody UserEditDTO userEditDTO) {
@@ -66,9 +73,17 @@ public class UserController {
         UserFollowingDTO searchResultDTO = new UserFollowingDTO();
         if (user.isPresent()) {
             searchResultDTO = modelMapper.map(user.get(), UserFollowingDTO.class);
-            searchResultDTO.setIsFollowing(followService.isFollowing(id));
         }
-        System.out.println(searchResultDTO.getIsFollowing());
+        searchResultDTO.setIsFollowing(followService.isFollowing(id));
         return ResponseEntity.ok(searchResultDTO);
+    }
+    @PostMapping("/image")
+    public String uploadImage(@RequestParam(name = "file") MultipartFile image) throws IOException {
+        return imageService.uploadImage(image);
+    }
+
+    @GetMapping("/image")
+    public void downloadImage(@RequestParam(name = "file") String name, HttpServletResponse response) throws IOException {
+        imageService.downloadImage(name, response);
     }
 }

@@ -17,4 +17,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "Or u.fullName LIKE CONCAT('%', :name, '%')")
     List<User> search(String name);
 
+    Optional<User> findUserByImage(String name);
 }
