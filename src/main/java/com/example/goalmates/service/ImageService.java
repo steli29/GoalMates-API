@@ -53,17 +53,7 @@ public class ImageService {
             throw new BadRequestException("No such user found");
         }
 
-        if (user.get().getImage() != null) {
-            File f = new File(DIRECTORY + user.get().getImage());
-            if (f.exists() && !f.isDirectory()) {
-                FileUtils.delete(FileUtils.getFile(DIRECTORY + user.get().getImage()));
-            }
-        }
-
-        File file = new File(DIRECTORY + name);
-
-        Files.copy(image.getInputStream(), file.toPath());
-        user.get().setImage(name);
+        user.get().setImage(image.getBytes());
         userRepository.save(user.get());
         return name;
     }
