@@ -11,5 +11,5 @@ public class UserSearchResultDTO {
     private Long id;
     private String firstName;
     private String lastName;
-    private String image;
+    private byte[] image;
 }

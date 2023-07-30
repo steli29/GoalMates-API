@@ -56,18 +56,19 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<UserSearchResultDTO>> search(@RequestParam("name") String name) {
+    public ResponseEntity<List<UserSearchResultDTO>> search(@RequestParam("name") String name, HttpServletResponse response) throws IOException {
         ModelMapper modelMapper = new ModelMapper();
         List<User> users = userRepository.search(name);
         List<UserSearchResultDTO> result = new ArrayList<>();
         for (User user : users) {
+            response.getOutputStream().write(user.getImage());
             result.add(modelMapper.map(user, UserSearchResultDTO.class));
         }
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/")
-    public ResponseEntity<UserFollowingDTO> getUserById(@RequestParam("id") Long id) {
+    public ResponseEntity<UserFollowingDTO> getUserById(@RequestParam("id") Long id , HttpServletResponse response) throws IOException {
         Optional<User> user = userRepository.findById(id);
         ModelMapper modelMapper = new ModelMapper();
         UserFollowingDTO searchResultDTO = new UserFollowingDTO();
@@ -75,6 +76,7 @@ public class UserController {
             searchResultDTO = modelMapper.map(user.get(), UserFollowingDTO.class);
         }
         searchResultDTO.setIsFollowing(followService.isFollowing(id));
+        response.getOutputStream().write(searchResultDTO.getImage());
         return ResponseEntity.ok(searchResultDTO);
     }
     @PostMapping("/image")
