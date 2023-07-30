@@ -32,6 +32,8 @@ public class User implements UserDetails {
     private String fullName;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private Integer registrationCode;
+    private boolean isVerified;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

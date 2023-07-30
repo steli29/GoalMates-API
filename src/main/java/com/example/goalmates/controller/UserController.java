@@ -78,8 +78,8 @@ public class UserController {
         return ResponseEntity.ok(searchResultDTO);
     }
     @PostMapping("/image")
-    public String uploadImage(@RequestParam(name = "file") MultipartFile image) throws IOException {
-        return imageService.uploadImage(image);
+    public void uploadImage(@RequestParam(name = "file") MultipartFile image) throws IOException {
+        imageService.uploadImage(image);
     }
 
     @GetMapping("/image")

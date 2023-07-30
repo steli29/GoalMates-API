@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -35,9 +36,8 @@ public class ImageService {
         Files.copy(file.toPath(), response.getOutputStream());
     }
 
-    public String uploadImage(MultipartFile image) throws IOException {
+    public void uploadImage(MultipartFile image) throws IOException {
         String extension = FilenameUtils.getExtension(image.getOriginalFilename());
-        String name = System.nanoTime() + "." + extension;
 
         if (extension == null) {
             throw new BadRequestException("File type extension is missing");
@@ -52,9 +52,8 @@ public class ImageService {
         if (user.isEmpty()) {
             throw new BadRequestException("No such user found");
         }
-
-        user.get().setImage(image.getBytes());
+        byte [] img = image.getBytes();
+        user.get().setImage(img);
         userRepository.save(user.get());
-        return name;
     }
 }
