@@ -1,10 +1,13 @@
 package com.example.goalmates.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -15,13 +18,16 @@ import lombok.NoArgsConstructor;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private Long id;
-    @Column(name = "post_name")
     private String title;
-    @Column(name = "post_content")
     private String content;
-    @ManyToOne()
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Long createdBy;
+    @ManyToMany
+    @JoinTable(
+            name = "post_shared_with_users",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonBackReference
+    private List<User> sharedWithUsers;
 }

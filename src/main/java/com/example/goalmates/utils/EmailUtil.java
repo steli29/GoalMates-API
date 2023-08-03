@@ -26,4 +26,14 @@ public class EmailUtil {
         message.setText("Code "+ code);
         mailSender.send(message);
     }
+
+    public void sendInvitationMail(String sendTo, String sendFrom){
+        SimpleMailMessage message = new SimpleMailMessage();
+        System.out.println(sendFrom);
+        System.out.println(sendTo);
+        message.setTo(sendTo);
+        message.setSubject("GoalMates");
+        message.setText(sendFrom + " invited you to join GoalMates");
+        mailSender.send(message);
+    }
 }
