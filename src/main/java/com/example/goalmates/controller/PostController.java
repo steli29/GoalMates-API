@@ -40,4 +40,9 @@ public class PostController {
     public Post updatePost(@RequestBody EditPostDTO editPostDTO){
         return postService.updatePost(editPostDTO);
     }
+
+    @GetMapping("/feed/")
+    public ResponseEntity<List<Post>> getFeed(@RequestParam("id") Long id) {
+        return ResponseEntity.ok(postService.getFeed(id));
+    }
 }

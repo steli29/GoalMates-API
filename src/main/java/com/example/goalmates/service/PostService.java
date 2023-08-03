@@ -4,8 +4,10 @@ import com.example.goalmates.dto.CreatePostDTO;
 import com.example.goalmates.dto.EditPostDTO;
 import com.example.goalmates.exception.BadRequestException;
 import com.example.goalmates.models.Post;
+import com.example.goalmates.models.PostUsers;
 import com.example.goalmates.models.User;
 import com.example.goalmates.repository.PostRepository;
+//import com.example.goalmates.repository.PostUserRepository;
 import com.example.goalmates.repository.PostUserRepository;
 import com.example.goalmates.repository.UserRepository;
 import com.example.goalmates.utils.EmailUtil;
@@ -84,6 +86,19 @@ public class PostService {
         postRepository.save(post);
         return post;
     }
-
+    public List<Post> getFeed (Long id){
+        List<Long> allPostIds = postRepository.findAllIds();
+        List<Post> feed = new ArrayList<>();
+        allPostIds.forEach(p->{
+            PostUsers u = new PostUsers();
+            u.setPost(postRepository.findById(p).get());
+            u.setUser(userRepository.findById(id).get());
+            if (postUserRepository.findById(u).isPresent()){
+                feed.add(postRepository.findById(p).get());
+            }
+        });
+        System.out.println(feed.toString());
+        return feed;
+    }
 // todo get all posts shared with user
 }

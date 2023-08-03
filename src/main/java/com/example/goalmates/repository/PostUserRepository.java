@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PostUserRepository  extends JpaRepository<PostUsers, PostUsersCompKey> {
+public interface PostUserRepository  extends JpaRepository<PostUsersCompKey,PostUsers> {
 }
