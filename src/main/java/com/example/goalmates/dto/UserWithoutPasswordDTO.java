@@ -13,5 +13,5 @@ public class UserWithoutPasswordDTO {
     private String lastName;
     private String email;
     private String token;
-    private String image;
+    private byte[] image;
 }
