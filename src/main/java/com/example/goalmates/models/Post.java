@@ -21,7 +21,9 @@ public class Post {
     private Long id;
     private String title;
     private String content;
-    private Long createdBy;
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User createdBy;
     @ManyToMany
     @JoinTable(
             name = "post_shared_with_users",

@@ -14,6 +14,7 @@ import com.example.goalmates.utils.EmailUtil;
 import com.example.goalmates.utils.InfoValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class PostService {
 
     public void createPost(CreatePostDTO createPostDTO) {
         ModelMapper modelMapper = new ModelMapper();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Post post = modelMapper.map(createPostDTO, Post.class);
         List<User> registeredUsers = new ArrayList<>();
         List<String> newUsers = new ArrayList<>();
@@ -49,6 +51,7 @@ public class PostService {
                     }
                 });
         post.setSharedWithUsers(registeredUsers);
+        post.setCreatedBy(user);
         postRepository.save(post);
         newUsers.forEach(email -> {
             emailUtil.sendInvitationMail(email, userRepository.findById(createPostDTO.getCreatedBy()).get().getEmail());
@@ -56,7 +59,11 @@ public class PostService {
     }
 
     public List<Post> getAllPostsByUserCreated(Long id){
-        List<Post> posts = postRepository.findAllPostsByCreatedBy(id);
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()){
+            throw new BadRequestException("User not found");
+        }
+        List<Post> posts = postRepository.findAllPostsByCreatedBy(user.get());
         return posts;
     }
 
