@@ -2,6 +2,7 @@ package com.example.goalmates.controller;
 
 import com.example.goalmates.dto.CreatePostDTO;
 import com.example.goalmates.dto.EditPostDTO;
+import com.example.goalmates.dto.PostDTO;
 import com.example.goalmates.models.Post;
 import com.example.goalmates.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,12 @@ public class PostController {
     }
 
     @GetMapping("/findAll/")
-    public ResponseEntity<List<Post>> getAllPostsByUsedId(@RequestParam("id") Long id) {
+    public ResponseEntity<List<PostDTO>> getAllPostsByUsedId(@RequestParam("id") Long id) {
         return ResponseEntity.ok(postService.getAllPostsByUserCreated(id));
     }
 
     @GetMapping("/")
-    public ResponseEntity<Post> getPostById(@RequestParam("id") Long id) {
+    public ResponseEntity<PostDTO> getPostById(@RequestParam("id") Long id) {
         return ResponseEntity.ok(postService.getPost(id));
     }
 
@@ -37,12 +38,12 @@ public class PostController {
     }
 
     @PutMapping("/update")
-    public Post updatePost(@RequestBody EditPostDTO editPostDTO){
+    public PostDTO updatePost(@RequestBody EditPostDTO editPostDTO){
         return postService.updatePost(editPostDTO);
     }
 
     @GetMapping("/feed/")
-    public ResponseEntity<List<Post>> getFeed(@RequestParam("id") Long id) {
+    public ResponseEntity<List<PostDTO>> getFeed(@RequestParam("id") Long id) {
         return ResponseEntity.ok(postService.getFeed(id));
     }
 }

@@ -2,12 +2,12 @@ package com.example.goalmates.service;
 
 import com.example.goalmates.dto.CreatePostDTO;
 import com.example.goalmates.dto.EditPostDTO;
+import com.example.goalmates.dto.PostDTO;
 import com.example.goalmates.exception.BadRequestException;
 import com.example.goalmates.models.Post;
 import com.example.goalmates.models.PostUsers;
 import com.example.goalmates.models.User;
 import com.example.goalmates.repository.PostRepository;
-//import com.example.goalmates.repository.PostUserRepository;
 import com.example.goalmates.repository.PostUserRepository;
 import com.example.goalmates.repository.UserRepository;
 import com.example.goalmates.utils.EmailUtil;
@@ -18,7 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,27 +52,36 @@ public class PostService {
                 });
         post.setSharedWithUsers(registeredUsers);
         post.setCreatedBy(user);
+        post.setDateCreated(new Date());
+        post.setComments(0L);
         postRepository.save(post);
         newUsers.forEach(email -> {
             emailUtil.sendInvitationMail(email, userRepository.findById(createPostDTO.getCreatedBy()).get().getEmail());
         });
     }
 
-    public List<Post> getAllPostsByUserCreated(Long id){
+    public List<PostDTO> getAllPostsByUserCreated(Long id) {
+        ModelMapper modelMapper = new ModelMapper();
+        List<PostDTO> postDTO = new ArrayList<>();
         Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             throw new BadRequestException("User not found");
         }
         List<Post> posts = postRepository.findAllPostsByCreatedBy(user.get());
-        return posts;
+
+        posts.forEach(post -> {
+            postDTO.add(modelMapper.map(post, PostDTO.class));
+        });
+        return postDTO;
     }
 
-    public Post getPost(Long id) {
+    public PostDTO getPost(Long id) {
+        ModelMapper modelMapper = new ModelMapper();
         Optional<Post> post = postRepository.findById(id);
-        if (post.isEmpty()){
+        if (post.isEmpty()) {
             throw new BadRequestException("Post not found");
         }
-        return post.get();
+        return modelMapper.map(post.get(), PostDTO.class);
     }
     public void deletePost(Long id) {
         Optional<Post> post = postRepository.findById(id);
@@ -81,7 +90,8 @@ public class PostService {
         }
         postRepository.deleteById(id);
     }
-    public Post updatePost(EditPostDTO editPostDTO){
+    public PostDTO updatePost(EditPostDTO editPostDTO){
+        ModelMapper modelMapper = new ModelMapper();
         Optional<Post> p = postRepository.findById(editPostDTO.getId());
         if (p.isEmpty()){
             throw new BadRequestException("Post not found");
@@ -91,21 +101,20 @@ public class PostService {
         post.setContent(editPostDTO.getContent());
 
         postRepository.save(post);
-        return post;
+        return modelMapper.map(post,PostDTO.class);
     }
-    public List<Post> getFeed (Long id){
+    public List<PostDTO> getFeed (Long id){
         List<Long> allPostIds = postRepository.findAllIds();
-        List<Post> feed = new ArrayList<>();
+        List<PostDTO> feed = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
         allPostIds.forEach(p->{
             PostUsers u = new PostUsers();
             u.setPost(postRepository.findById(p).get());
             u.setUser(userRepository.findById(id).get());
             if (postUserRepository.findById(u).isPresent()){
-                feed.add(postRepository.findById(p).get());
+                feed.add(modelMapper.map(postRepository.findById(p).get(),PostDTO.class));
             }
         });
-        System.out.println(feed.toString());
         return feed;
     }
-// todo get all posts shared with user
 }
