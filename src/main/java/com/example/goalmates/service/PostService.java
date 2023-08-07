@@ -1,12 +1,12 @@
 package com.example.goalmates.service;
 
-import com.example.goalmates.dto.CreatePostDTO;
-import com.example.goalmates.dto.EditPostDTO;
-import com.example.goalmates.dto.PostDTO;
+import com.example.goalmates.dto.*;
 import com.example.goalmates.exception.BadRequestException;
+import com.example.goalmates.models.Comment;
 import com.example.goalmates.models.Post;
 import com.example.goalmates.models.PostUsers;
 import com.example.goalmates.models.User;
+import com.example.goalmates.repository.CommentRepository;
 import com.example.goalmates.repository.PostRepository;
 import com.example.goalmates.repository.PostUserRepository;
 import com.example.goalmates.repository.UserRepository;
@@ -34,6 +34,8 @@ public class PostService {
     private InfoValidator infoValidator;
     @Autowired
     private PostUserRepository postUserRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
     public void createPost(CreatePostDTO createPostDTO) {
         ModelMapper modelMapper = new ModelMapper();
@@ -116,5 +118,16 @@ public class PostService {
             }
         });
         return feed;
+    }
+
+    public List<CommentDTO> getAllCommentsByPost(Long postId){
+        List<Comment> comments =commentRepository.findAllCommentsByPostId(postId);
+        System.out.println(comments.get(0).getLikes());
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
+        comments.forEach(comment->{
+            commentDTOS.add(modelMapper.map(comment, CommentDTO.class));
+        });
+        return commentDTOS;
     }
 }

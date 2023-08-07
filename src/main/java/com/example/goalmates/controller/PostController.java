@@ -1,8 +1,10 @@
 package com.example.goalmates.controller;
 
+import com.example.goalmates.dto.CommentDTO;
 import com.example.goalmates.dto.CreatePostDTO;
 import com.example.goalmates.dto.EditPostDTO;
 import com.example.goalmates.dto.PostDTO;
+import com.example.goalmates.models.Comment;
 import com.example.goalmates.models.Post;
 import com.example.goalmates.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +47,10 @@ public class PostController {
     @GetMapping("/feed/")
     public ResponseEntity<List<PostDTO>> getFeed(@RequestParam("id") Long id) {
         return ResponseEntity.ok(postService.getFeed(id));
+    }
+
+    @GetMapping("/comments/")
+    public ResponseEntity<List<CommentDTO>> getAllCommentsByPost(@RequestParam("id") Long id){
+        return ResponseEntity.ok(postService.getAllCommentsByPost(id));
     }
 }
