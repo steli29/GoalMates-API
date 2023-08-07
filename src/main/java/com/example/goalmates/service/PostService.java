@@ -2,14 +2,8 @@ package com.example.goalmates.service;
 
 import com.example.goalmates.dto.*;
 import com.example.goalmates.exception.BadRequestException;
-import com.example.goalmates.models.Comment;
-import com.example.goalmates.models.Post;
-import com.example.goalmates.models.PostUsers;
-import com.example.goalmates.models.User;
-import com.example.goalmates.repository.CommentRepository;
-import com.example.goalmates.repository.PostRepository;
-import com.example.goalmates.repository.PostUserRepository;
-import com.example.goalmates.repository.UserRepository;
+import com.example.goalmates.models.*;
+import com.example.goalmates.repository.*;
 import com.example.goalmates.utils.EmailUtil;
 import com.example.goalmates.utils.InfoValidator;
 import org.modelmapper.ModelMapper;
@@ -36,6 +30,8 @@ public class PostService {
     private PostUserRepository postUserRepository;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private LikeRepository likeRepository;
 
     public void createPost(CreatePostDTO createPostDTO) {
         ModelMapper modelMapper = new ModelMapper();
@@ -85,17 +81,19 @@ public class PostService {
         }
         return modelMapper.map(post.get(), PostDTO.class);
     }
+
     public void deletePost(Long id) {
         Optional<Post> post = postRepository.findById(id);
-        if (post.isEmpty()){
+        if (post.isEmpty()) {
             throw new BadRequestException("Post not found");
         }
         postRepository.deleteById(id);
     }
-    public PostDTO updatePost(EditPostDTO editPostDTO){
+
+    public PostDTO updatePost(EditPostDTO editPostDTO) {
         ModelMapper modelMapper = new ModelMapper();
         Optional<Post> p = postRepository.findById(editPostDTO.getId());
-        if (p.isEmpty()){
+        if (p.isEmpty()) {
             throw new BadRequestException("Post not found");
         }
         Post post = p.get();
@@ -103,31 +101,33 @@ public class PostService {
         post.setContent(editPostDTO.getContent());
 
         postRepository.save(post);
-        return modelMapper.map(post,PostDTO.class);
+        return modelMapper.map(post, PostDTO.class);
     }
-    public List<PostDTO> getFeed (Long id){
+
+    public List<PostDTO> getFeed(Long id) {
         List<Long> allPostIds = postRepository.findAllIds();
         List<PostDTO> feed = new ArrayList<>();
         ModelMapper modelMapper = new ModelMapper();
-        allPostIds.forEach(p->{
+        allPostIds.forEach(p -> {
             PostUsers u = new PostUsers();
             u.setPost(postRepository.findById(p).get());
             u.setUser(userRepository.findById(id).get());
-            if (postUserRepository.findById(u).isPresent()){
-                feed.add(modelMapper.map(postRepository.findById(p).get(),PostDTO.class));
+            if (postUserRepository.findById(u).isPresent()) {
+                feed.add(modelMapper.map(postRepository.findById(p).get(), PostDTO.class));
             }
         });
         return feed;
     }
 
-    public List<CommentDTO> getAllCommentsByPost(Long postId){
-        List<Comment> comments =commentRepository.findAllCommentsByPostId(postId);
-        System.out.println(comments.get(0).getLikes());
+    public List<CommentDTO> getAllCommentsByPost(Long postId) {
+        List<Comment> comments = commentRepository.findAllCommentsByPostId(postId);
         List<CommentDTO> commentDTOS = new ArrayList<>();
         ModelMapper modelMapper = new ModelMapper();
-        comments.forEach(comment->{
+        for (Comment comment : comments) {
+            List<Like> likes = likeRepository.findAllLikesByCommentId(comment.getId());
+            comment.setLikes(likes);
             commentDTOS.add(modelMapper.map(comment, CommentDTO.class));
-        });
+        }
         return commentDTOS;
     }
 }
