@@ -41,4 +41,12 @@ public class CommentService {
         p.setComments(p.getComments()+1);
         postRepository.save(p);
     }
+
+    public void deleteComment(Long commentId){
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        if (comment.isEmpty()){
+            throw new BadRequestException("Comment not found");
+        }
+        commentRepository.delete(comment.get());
+    }
 }
