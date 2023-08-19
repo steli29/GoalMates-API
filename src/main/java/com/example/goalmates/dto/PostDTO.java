@@ -21,7 +21,6 @@ public class PostDTO {
     private String title;
     private String content;
     private UserWithoutPasswordDTO createdBy;
-    private List<Comment> comments = new ArrayList<>();
     private Long commentsCount;
     private Date dateCreated;
 }
