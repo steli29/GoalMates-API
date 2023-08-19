@@ -4,8 +4,6 @@ import com.example.goalmates.dto.CommentDTO;
 import com.example.goalmates.dto.CreatePostDTO;
 import com.example.goalmates.dto.EditPostDTO;
 import com.example.goalmates.dto.PostDTO;
-import com.example.goalmates.models.Comment;
-import com.example.goalmates.models.Post;
 import com.example.goalmates.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

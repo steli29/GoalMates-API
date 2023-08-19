@@ -8,9 +8,12 @@ import com.example.goalmates.models.User;
 import com.example.goalmates.repository.PostRepository;
 import com.example.goalmates.repository.PostUpdatesRepository;
 import com.example.goalmates.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,5 +43,18 @@ public class PostUpdatesService {
         postUpdates.setImage(postUpdatesDTO.getImage());
 
         postUpdatesRepository.save(postUpdates);
+    }
+
+    public List<PostUpdatesDTO> getAllUpdatesByPostId(Long id){
+        List<PostUpdatesDTO> updatesDTOS = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
+        List<PostUpdates> u = postUpdatesRepository.findAllByPostId(id);
+        if (u.isEmpty()) {
+            throw new BadRequestException("Updates not found");
+        }
+        u.forEach(up->{
+            updatesDTOS.add(modelMapper.map(up,PostUpdatesDTO.class));
+        });
+        return updatesDTOS;
     }
 }
