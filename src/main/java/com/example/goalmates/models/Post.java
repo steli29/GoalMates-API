@@ -36,4 +36,5 @@ public class Post {
     private List<User> sharedWithUsers;
     private Long comments;
     private Date dateCreated;
+    private Long commentsCount;
 }
