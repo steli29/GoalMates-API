@@ -34,6 +34,6 @@ public class Post {
     )
     @JsonBackReference
     private List<User> sharedWithUsers;
-    private Long comments;
+    private Long commentsCount;
     private Date dateCreated;
 }

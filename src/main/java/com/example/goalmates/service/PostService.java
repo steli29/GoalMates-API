@@ -51,7 +51,7 @@ public class PostService {
         post.setSharedWithUsers(registeredUsers);
         post.setCreatedBy(user);
         post.setDateCreated(new Date());
-        post.setComments(0L);
+        post.setCommentsCount(0L);
         postRepository.save(post);
         newUsers.forEach(email -> {
             emailUtil.sendInvitationMail(email, userRepository.findById(createPostDTO.getCreatedBy()).get().getEmail());

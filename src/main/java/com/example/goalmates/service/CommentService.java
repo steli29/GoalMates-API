@@ -38,7 +38,7 @@ public class CommentService {
         comment.setText(postUserIdDTO.getText());
         commentRepository.save(comment);
         Post p = post.get();
-        p.setComments(p.getComments()+1);
+        p.setCommentsCount(p.getCommentsCount()+1);
         postRepository.save(p);
     }
 
@@ -47,6 +47,13 @@ public class CommentService {
         if (comment.isEmpty()){
             throw new BadRequestException("Comment not found");
         }
+        Optional<Post> post = postRepository.findById(comment.get().getPost().getId());
+        if (post.isEmpty()){
+            throw new BadRequestException("Post not found");
+        }
+        Post p = post.get();
+        p.setCommentsCount(p.getCommentsCount()-1);
+        postRepository.save(p);
         commentRepository.delete(comment.get());
     }
 }
