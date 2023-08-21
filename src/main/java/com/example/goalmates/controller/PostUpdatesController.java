@@ -3,6 +3,7 @@ package com.example.goalmates.controller;
 import com.example.goalmates.dto.PostUpdatesDTO;
 import com.example.goalmates.service.ImageService;
 import com.example.goalmates.service.PostUpdatesService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,10 @@ public class PostUpdatesController {
     private ImageService imageService;
 
     @PostMapping("")
-    public void createUpdate(@RequestBody PostUpdatesDTO postUpdatesDTO) {
-        postUpdatesService.addPostUpdate(postUpdatesDTO);
+    public void createUpdate(@RequestParam(name = "file") MultipartFile image, @RequestParam(name = "dto") String dto) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        PostUpdatesDTO postUpdatesDTO = mapper.readValue(dto, PostUpdatesDTO.class);
+        postUpdatesService.addPostUpdate(postUpdatesDTO, image);
     }
 
     @GetMapping("/findAll/")
@@ -29,8 +32,4 @@ public class PostUpdatesController {
         return ResponseEntity.ok(postUpdatesService.getAllUpdatesByPostId(id));
     }
 
-    @PostMapping("/image/")
-    public void uploadImage(@RequestParam(name = "file") MultipartFile image, @RequestParam("id") Long id) throws IOException {
-        imageService.uploadUpdateImage(image, id);
-    }
 }
