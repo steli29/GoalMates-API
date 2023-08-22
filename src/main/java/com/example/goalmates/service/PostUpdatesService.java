@@ -72,9 +72,6 @@ public class PostUpdatesService {
         List<PostUpdatesDTO> updatesDTOS = new ArrayList<>();
         ModelMapper modelMapper = new ModelMapper();
         List<PostUpdates> u = postUpdatesRepository.findAllByPostId(id);
-        if (u.isEmpty()) {
-            throw new BadRequestException("Updates not found");
-        }
         u.forEach(up -> {
             updatesDTOS.add(modelMapper.map(up, PostUpdatesDTO.class));
         });
