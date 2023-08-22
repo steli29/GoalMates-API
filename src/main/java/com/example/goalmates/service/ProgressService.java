@@ -8,7 +8,6 @@ import com.example.goalmates.models.User;
 import com.example.goalmates.repository.PostUpdatesRepository;
 import com.example.goalmates.repository.ProgressRepository;
 import com.example.goalmates.repository.UserRepository;
-import com.example.goalmates.utils.ProgressUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +21,6 @@ public class ProgressService {
     private UserRepository userRepository;
     @Autowired
     private PostUpdatesRepository postUpdatesRepository;
-    @Autowired
-    private ProgressUtil progressUtil;
 
     public void addProgress(ProgressDTO progressDTO) {
         Optional<User> user = userRepository.findById(progressDTO.getUserId());
@@ -40,7 +37,6 @@ public class ProgressService {
         progress.setProgress(progressDTO.getProgress());
         progress.setIsRated(true);
         progressRepository.save(progress);
-        progressUtil.calcUpdateProgress(postUpdates.get().getId());
     }
 
     private void updateTotalProgress() {
