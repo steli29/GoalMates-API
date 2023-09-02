@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.UnaryOperator;
 
 @Component
 public class ProgressUtil {
@@ -40,5 +43,16 @@ public class ProgressUtil {
         postUpdates.get().setTotalProgress(BigDecimal.valueOf(normalizedRating));
 
         postUpdatesRepository.save(postUpdates.get());
+        List<PostUpdates> up = postUpdatesRepository.findAllByPostId(post.get().getId());
+        List<BigDecimal> dec = new ArrayList<>();
+        up.forEach(updates->{
+            dec.add(updates.getTotalProgress());
+        });
+        double total =0.0;
+        for (BigDecimal rating : dec) {
+            total += rating.doubleValue();
+        }
+        post.get().setProgress(BigDecimal.valueOf(total/up.size()));
+        postRepository.save(post.get());
     }
 }

@@ -50,6 +50,7 @@ public class PostUpdatesService {
         postUpdates.setText(postUpdatesDTO.getText());
         postUpdates.setTitle(postUpdatesDTO.getTitle());
         postUpdates.setImage(postUpdatesDTO.getImage());
+        postUpdates.setTotalProgress(BigDecimal.ZERO);
         postUpdatesRepository.save(postUpdates);
         imageService.uploadUpdateImage(file, postUpdates.getId());
         List<User> users = new ArrayList<>();
