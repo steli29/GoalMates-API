@@ -9,6 +9,7 @@ import javax.mail.Message;
 
 @Component
 public class EmailUtil {
+    private static final String link = "http://localhost:8080/auth/register";
     @Autowired
     private JavaMailSender mailSender;
     public void sendMailWithLink(String sendTo, String link){
@@ -29,11 +30,9 @@ public class EmailUtil {
 
     public void sendInvitationMail(String sendTo, String sendFrom){
         SimpleMailMessage message = new SimpleMailMessage();
-        System.out.println(sendFrom);
-        System.out.println(sendTo);
         message.setTo(sendTo);
-        message.setSubject("GoalMates");
-        message.setText(sendFrom + " invited you to join GoalMates");
+        message.setSubject(sendFrom + " invited you to join GoalMates");
+        message.setText("Click on to join GoalMates: " + link);
         mailSender.send(message);
     }
 }
