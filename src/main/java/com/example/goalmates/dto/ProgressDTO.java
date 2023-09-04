@@ -14,4 +14,5 @@ public class ProgressDTO {
     private Long postUpdatesId;
     private Long userId;
     private BigDecimal progress;
+    private Boolean isRated;
 }

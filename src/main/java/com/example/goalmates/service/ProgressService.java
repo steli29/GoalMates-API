@@ -9,6 +9,7 @@ import com.example.goalmates.repository.PostUpdatesRepository;
 import com.example.goalmates.repository.ProgressRepository;
 import com.example.goalmates.repository.UserRepository;
 import com.example.goalmates.utils.ProgressUtil;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,9 @@ public class ProgressService {
         progressUtil.calcUpdateProgress(postUpdates.get().getId());
     }
 
-    private void updateTotalProgress() {
-
+    public ProgressDTO getProgress(Long userId, Long postUpdateId) {
+        ModelMapper modelMapper = new ModelMapper();
+        Progress progress = progressRepository.findByUserIdAndPostUpdateId(userId, postUpdateId);
+        return modelMapper.map(progress, ProgressDTO.class);
     }
 }
