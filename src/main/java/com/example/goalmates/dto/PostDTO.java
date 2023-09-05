@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,4 +24,5 @@ public class PostDTO {
     private UserWithoutPasswordDTO createdBy;
     private Long commentsCount;
     private Date dateCreated;
+    private BigDecimal progress;
 }
