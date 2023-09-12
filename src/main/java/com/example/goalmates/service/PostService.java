@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,7 @@ public class PostService {
         post.setCreatedBy(user);
         post.setDateCreated(new Date());
         post.setCommentsCount(0L);
+        post.setProgress(BigDecimal.ZERO);
         postRepository.save(post);
         newUsers.forEach(email -> {
             emailUtil.sendInvitationMail(email, userRepository.findById(createPostDTO.getCreatedBy()).get().getEmail());

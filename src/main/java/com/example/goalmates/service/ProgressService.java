@@ -35,9 +35,7 @@ public class ProgressService {
         if (postUpdates.isEmpty()) {
             throw new BadRequestException("Update not found");
         }
-        Progress progress = new Progress();
-        progress.setUser(user.get());
-        progress.setPostUpdates(postUpdates.get());
+        Progress progress = progressRepository.findByUserIdAndPostUpdateId(progressDTO.getUserId(),progressDTO.getPostUpdatesId());
         progress.setProgress(progressDTO.getProgress());
         progress.setIsRated(true);
         progressRepository.save(progress);
